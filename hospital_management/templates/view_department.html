@@ -1,0 +1,70 @@
+{% extends 'base2.html' %}
+{% block title %}{{ department.name }} - Department{% endblock %}
+
+{% block content %}
+<div style="padding:36px; background:#f6f9fc; min-height:100vh;">
+    <div style="max-width:1100px; margin:0 auto;">
+        <h2 style="color:#0A4D68;">{{ department.name }}</h2>
+        <p style="color:#6b7280;">{{ department.description or "No description available." }}</p>
+
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:14px; margin-top:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="color:#233a45;">Doctors</strong>
+                <a href="{{ url_for('views.create_doctor') }}" 
+                    style="padding:6px 10px; text-decoration:none; border:1px solid #cfeafc; 
+                        background:#e8f6ff; color:#0a5f9a; border-radius:6px; font-size:13px;">
+                    Add Doctor
+                </a>
+            </div>
+
+            {% if doctors %}
+            <table style="width:100%; border-collapse:collapse; font-family:Arial;">
+                <thead>
+                    <tr style="text-align:left; background:#fbfdff; border-bottom:2px solid #eef3f6;">
+                        <th style="padding:8px 10px; width:40px;">#</th>
+                        <th style="padding:8px 10px;">Name</th>
+                        <th style="padding:8px 10px;">Email</th>
+                        <th style="padding:8px 10px; width:160px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in doctors %}
+                    <tr style="border-bottom:1px solid #f3f6f8;">
+                        <td style="padding:10px;">{{ loop.index }}</td>
+                        <td style="padding:10px;">{{ doc.user.name if doc.user else '—' }}</td>
+                        <td style="padding:10px;">{{ doc.user.email if doc.user else '—' }}</td>
+                        <td style="padding:8px;">
+                            <a href="{{ url_for('views.edit_doctor', doctor_id=doc.id) }}" 
+                                style="padding:6px 9px; margin-right:6px; background:#e8f6ff; color:#0a5f9a; 
+                                    border:1px solid #cfeafc; border-radius:6px; text-decoration:none; font-size:13px;">
+                                edit
+                            </a>
+
+                            <form action="{{ url_for('views.delete_doctor', doctor_id=doc.id) }}" 
+                                method="POST" style="display:inline-block;">
+                                <button type="submit" 
+                                        style="padding:6px 9px; background:#ffefef; color:#b32b2b; 
+                                            border:1px solid #f5bdbd; border-radius:6px; cursor:pointer; font-size:13px;">
+                                    delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div style="padding:12px; color:#64757f;">No doctors are assigned to this department yet.</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-top:18px;">
+            <a href="{{ url_for('views.admin_dashboard') }}" 
+                style="padding:8px 14px; background:#ffffff; border:1px solid #0A4D68; color:#0A4D68; 
+                    border-radius:6px; text-decoration:none; font-size:14px; display:inline-block;">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

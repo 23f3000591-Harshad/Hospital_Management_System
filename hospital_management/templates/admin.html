@@ -1,0 +1,154 @@
+{% extends 'base2.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div style="width:100%; min-height:100vh; background:#f6f9fc; padding:24px; box-sizing:border-box;">
+    <div style="max-width:1100px; margin:0 auto;">
+
+        <!-- HEADER WITH BUTTONS -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="color:#0A4D68; margin:0;">Admin Dashboard</h2>
+
+            <div style="display:flex; gap:10px;">
+                <a href="{{ url_for('views.create_doctor') }}" 
+                    style="text-decoration:none; padding:8px 14px; background:#ffffff; border:1px solid #0A4D68; 
+                        color:#0A4D68; border-radius:6px; font-size:14px;">
+                    Add Doctor
+                </a>
+            </div>
+        </div>
+
+        <!-- Departments -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:14px; margin-bottom:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="color:#233a45;">Departments</strong>
+                <a href="{{ url_for('views.create_department') }}" 
+                    style="padding:6px 10px; background:#2ecc71; color:white; border-radius:6px; text-decoration:none; font-size:13px;">
+                    create
+                </a>
+            </div>
+
+            <table style="width:100%; border-collapse:collapse; font-family:Arial;">
+                <thead>
+                    <tr style="text-align:left; background:#fbfdff; border-bottom:2px solid #eef3f6;">
+                        <th style="padding:8px 10px; width:40px;">#</th>
+                        <th style="padding:8px 10px;">Department Name</th>
+                        <th style="padding:8px 10px; width:180px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept in departments %}
+                    <tr style="border-bottom:1px solid #f3f6f8;">
+                        <td style="padding:10px;">{{ loop.index }}</td>
+                        <td style="padding:10px;">{{ dept.name }}</td>
+                        <td style="padding:8px;">
+                            <a href="{{ url_for('views.view_department', id=dept.id) }}" 
+                                style="padding:6px 9px; margin-right:6px; background:#e8f6ff; color:#0a5f9a; 
+                                    border:1px solid #cfeafc; border-radius:6px; text-decoration:none; font-size:13px;">
+                                view
+                            </a>
+
+                            <form action="{{ url_for('views.delete_department', id=dept.id) }}" 
+                                method="POST" style="display:inline-block;">
+                                <button type="submit" 
+                                        style="padding:6px 9px; background:#ffefef; color:#b32b2b; border:1px solid #f5bdbd; 
+                                            border-radius:6px; cursor:pointer; font-size:13px;">
+                                    delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" style="padding:12px; color:#64757f;">No departments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Registered Patients  -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:14px; margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong style="color:#233a45;">Registered Patients</strong>
+        </div>
+
+        <table style="width:100%; border-collapse:collapse; font-family:Arial;">
+            <thead>
+            <tr style="text-align:left; background:#fbfdff; border-bottom:2px solid #eef3f6;">
+                <th style="padding:8px 10px; width:40px;">#</th>
+                <th style="padding:8px 10px;">Name</th>
+                <th style="padding:8px 10px;">Email</th>
+                <th style="padding:8px 10px;">Age</th>
+                <th style="padding:8px 10px; width:140px;">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in patients %}
+            <tr style="border-bottom:1px solid #f3f6f8;">
+                <td style="padding:10px;">{{ loop.index }}</td>
+                <td style="padding:10px;">{{ p.user.name if p.user else '—' }}</td>
+                <td style="padding:10px;">{{ p.user.email if p.user else '—' }}</td>
+                <td style="padding:10px;">{{ p.age if p.age is not none else '—' }}</td>
+                <td style="padding:8px;">
+                <a href="{{ url_for('views.view_patient_history', patient_id=p.user.id) }}" 
+                    style="padding:6px 9px; margin-right:6px; background:#e8f6ff; color:#0a5f9a; 
+                            border:1px solid #cfeafc; border-radius:6px; text-decoration:none; font-size:13px;">
+                    view history
+                </a>
+
+                <form action="{{ url_for('views.delete_patient', patient_id=p.user.id) }}" method="POST" style="display:inline-block; margin:0;">
+            
+                    <button type="submit" style="padding:6px 9px; background:#ffefef; color:#b32b2b; border:1px solid #f5bdbd; border-radius:6px; cursor:pointer; font-size:13px;">
+                    delete
+                    </button>
+                </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="padding:12px; color:#64757f;">No patients found.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <!-- Upcoming Appointments  -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:14px; margin-bottom:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="color:#233a45;">Upcoming Appointments</strong>
+            </div>
+
+            <table style="width:100%; border-collapse:collapse; font-family:Arial;">
+                <thead>
+                    <tr style="text-align:left; background:#fbfdff; border-bottom:2px solid #eef3f6;">
+                        <th style="padding:8px 10px;">Sr No.</th>
+                        <th style="padding:8px 10px;">Patient Name</th>
+                        <th style="padding:8px 10px;">Doctor Name</th>
+                        <th style="padding:8px 10px;">Department</th>
+                        <th style="padding:8px 10px;">Patient History</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in appointments %}
+                    <tr style="border-bottom:1px solid #f3f6f8;">
+                        <td style="padding:10px;">{{ loop.index }}</td>
+                        <td style="padding:10px;">{{ a.patient.user.name if a.patient and a.patient.user else '—' }}</td>
+                        <td style="padding:10px;">{{ a.doctor.user.name if a.doctor and a.doctor.user else '—' }}</td>
+                        <td style="padding:10px;">{{ a.doctor.department.name if a.doctor and a.doctor.department else '—' }}</td>
+                        <td style="padding:8px;">
+                            <a href="{{ url_for('views.view_patient_history', patient_id=a.patient.id) }}" 
+                            style="padding:6px 9px; border-radius:6px; background:#e8f6ff; color:#0a5f9a; border:1px solid #cfeafc; text-decoration:none; font-size:13px;">view</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" style="padding:12px; color:#64757f;">No upcoming appointments.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

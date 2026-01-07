@@ -1,0 +1,85 @@
+{% extends 'base2.html' %}
+{% block title %}Update Patient History{% endblock %}
+
+{% block content %}
+<style>
+.container {
+    padding: 36px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #233a45;
+}
+.card {
+    background:#fff; border:1px solid #e6eaee; border-radius:8px; padding:18px; margin-bottom:18px;
+}
+.form-row { display:flex; gap:12px; margin-bottom:12px; }
+.form-col { flex:1; }
+label { display:block; font-weight:600; margin-bottom:6px; font-size:0.95rem; color:#34495e; }
+input[type="text"], textarea {
+    width:100%; padding:8px 10px; border:1px solid #dfe6ea; border-radius:6px; font-size:0.95rem;
+}
+textarea { min-height:100px; resize:vertical; }
+.btn { padding:8px 12px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); cursor:pointer; }
+.btn-primary { background:#2c7be5; color:#fff; border-color:#2c7be5; }
+.btn-secondary { background:transparent; border:1px solid #ccd6dd; color:#233a45; }
+.small-note { color:#6b7280; font-size:0.9rem; margin-top:8px; }
+</style>
+
+<div class="container">
+    <h2>Update Patient History</h2>
+    <div class="card">
+        <p style="margin:0 0 8px 0;"><strong>Patient:</strong> {{ patient.user.name if patient and patient.user else 'Unknown' }}</p>
+        <p style="margin:0 0 8px 0;"><strong>Department:</strong> {{ doctor.department.name if doctor and doctor.department else '—' }}</p>
+        <p style="margin:0 0 12px 0;"><strong>Appointment Date:</strong> {{ appointment.date.strftime('%d/%m/%Y') }} &nbsp; <strong>Time:</strong> {{ appointment.time.strftime('%I:%M %p') }}</p>
+
+        <form method="post" action="{{ url_for('views.update_patient_history', appointment_id=appointment.id) }}">
+        <!-- add CSRF token if you use Flask-WTF -->
+        <div class="form-row">
+            <div class="form-col">
+            <label for="visit_type">Visit Type</label>
+            <input type="text" id="visit_type" name="visit_type" value="{{ existing.visit_type }}">
+            </div>
+            <div class="form-col">
+            <label for="tests_done">Tests Done</label>
+            <input type="text" id="tests_done" name="tests_done" value="{{ existing.tests_done }}">
+            </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+            <label for="diagnosis">Diagnosis</label>
+            <input type="text" id="diagnosis" name="diagnosis" value="{{ existing.diagnosis }}">
+        </div>
+
+        <div style="margin-bottom:12px;">
+            <label for="prescription">Prescription (short)</label>
+            <textarea id="prescription" name="prescription">{{ existing.prescription }}</textarea>
+        </div>
+
+        <div style="margin-bottom:12px;">
+            <label for="medicines">Medicines / Dosage</label>
+            <input type="text" id="medicines" name="medicines" value="{{ existing.medicines }}">
+            <div class="small-note">E.g. "Medicine1 1-0-1; Medicine2 0-1-1"</div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:center;">
+            <label style="margin:0;">
+            <input type="checkbox" name="mark_complete" /> Mark appointment as completed
+            </label>
+
+            <div style="margin-left:auto;">
+            <a href="{{ url_for('views.doctor_dashboard') }}" class="btn btn-secondary">cancel</a>
+            <button type="submit" class="btn btn-primary">save</button>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    {% if treatment %}
+        <div class="card">
+        <h4 style="margin-top:0">Existing Treatment</h4>
+        <p><strong>Diagnosis:</strong> {{ treatment.diagnosis or '—' }}</p>
+        <p><strong>Prescription:</strong><br/> <pre style="white-space:pre-wrap">{{ treatment.prescription or '—' }}</pre></p>
+        <p><strong>Notes:</strong><br/> <pre style="white-space:pre-wrap">{{ treatment.notes or '—' }}</pre></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

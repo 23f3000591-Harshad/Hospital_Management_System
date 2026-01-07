@@ -1,0 +1,61 @@
+{% extends 'base2.html' %}
+{% block title %}Patient Edit Profile{% endblock %}
+
+{% block content %}
+<div style="
+    width:100%;
+    min-height:100vh;
+    background:#e9f4ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding-top:40px;
+">
+    <div style="
+        width:350px;
+        padding:20px;
+        background:white;
+        border:1px solid #ccc;
+        border-radius:10px;
+        text-align:center;
+    ">
+        
+        <h2 style="
+            margin-bottom:20px;
+            color:#0A4D68;
+            font-family:Arial;
+        ">Edit Profile</h2>
+
+        <form action="/patient/edit_profile" method="POST">
+
+            <input type="text" name="name" placeholder="Name" value="{{ user.name }}" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <input type="email" name="email" placeholder="Email" value="{{ user.email }}" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+
+            <input type="number" name="age" placeholder="Age" value="{{ patient.age }}" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">            
+
+            <input type="password" name="password" placeholder="Password" value="{{ user.password }}" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <button type="submit" style="
+                width:95%; padding:10px; background:#0A4D68; color:white;
+                border:none; border-radius:5px; cursor:pointer;
+            ">Update Profile</button>
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{% block meta_description %}Default description{% endblock %}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<script>
+    setTimeout(() => {
+        document.querySelectorAll(".flash-msg").forEach(msg => {
+        msg.style.opacity = "0";
+        setTimeout(() => msg.remove(), 800); // remove after fade-out
+        });
+    }, 3000);
+</script>
+
+
+<body style="margin:0; font-family:Arial, sans-serif; background:#f4f6f9;">
+        <!-- NAVBAR -->
+        <div style="background:#ffffff; padding:15px 40px; display:flex; justify-content:space-between; align-items:center; 
+        box-shadow:0 2px 5px rgba(0,0,0,0.1); position:sticky; top:0; z-index:10;">
+    
+            <div>
+                <img src="{{ url_for('static', filename='images/logo.png') }}" style="width:180px; margin-bottom:center;"> 
+            </div>
+    
+            <div>
+                {% if session.get('user_name') and session.get('user_role') == 'admin' %}
+                    <a href="/admin" style="margin:0 15px; text-decoration:none; color:#34495e; font-weight:500;">Home</a>
+                    <a href="/logout" style="margin-left:20px; padding:9px 20px; background:#2980b9; 
+                    color:white; border-radius:5px; text-decoration:none; border-radius:10px">Logout</a>
+                {% elif session.get('user_name') and session.get('user_role') == 'doctor' %}
+                    <a href="/doctor/dashboard" style="margin:0 15px; text-decoration:none; color:#34495e; font-weight:500;">Home</a>
+                    <a href="/logout" style="margin-left:20px; padding:9px 20px; background:#2980b9; 
+                    color:white; border-radius:5px; text-decoration:none; border-radius:10px">Logout</a>
+                {% else %}
+                    <a href="/patient/dashboard" style="margin:0 15px; text-decoration:none; color:#34495e; font-weight:500;">Home</a>
+                    <a href="/logout" style="margin-left:20px; padding:9px 20px; background:#2980b9; 
+                    color:white; border-radius:5px; text-decoration:none; border-radius:10px">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-box" style="
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        animation: fadeIn 0.3s;
+        ">
+        {% for category, message in messages %}
+            <div class="flash-msg" style="
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            min-width: 250px;
+            background: 
+                {% if category == 'error' %}
+                #ff4d4d;
+                {% else %}
+                #28a745;
+                {% endif %};
+            opacity: 0.9;
+            transition: opacity 0.8s ease;
+            ">
+            {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+
+    {% block content %}{% endblock %}
+
+    <!-- ANIMATIONS -->
+    <style>
+        @keyframes fade {
+            from {opacity:0;}
+            to {opacity:1;}
+        }
+
+        @keyframes slide {
+            from {transform:translateY(40px); opacity:0;}
+            to {transform:translateY(0); opacity:1;}
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'base2.html' %}
+{% block title %}Edit Appointment{% endblock %}
+
+{% block content %}
+<div style="padding:24px; max-width:600px; margin:0 auto; background:#fff; border:1px solid #e3e9ee; border-radius:8px;">
+    <h3>Edit appointment</h3>
+    <form method="POST">
+        <div style="margin-bottom:8px;">
+            <label>Date</label>
+            <input type="date" name="date" value="{{ appointment.date.isoformat() }}" required style="padding:8px; border-radius:6px; border:1px solid #ddd;">
+        </div>
+        <div style="margin-bottom:8px;">
+            <label>Time</label>
+            <input type="time" name="time" value="{{ appointment.time.strftime('%H:%M') }}" required style="padding:8px; border-radius:6px; border:1px solid #ddd;">
+        </div>
+        <div style="margin-bottom:8px;">
+            <label>Notes (optional)</label>
+            <textarea name="notes" rows="4" style="width:100%; padding:8px; border-radius:6px; border:1px solid #ddd;">{{ appointment.treatment.notes if appointment.treatment else '' }}</textarea>
+        </div>
+        <div style="text-align:right;">
+            <a href="{{ url_for('views.doctor_dashboard') }}" style="margin-right:10px; text-decoration:none; color:#64757f;">Cancel</a>
+            <button type="submit" style="padding:8px 14px; background:#2ecc71; color:white; border-radius:6px; border:none;">Save</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

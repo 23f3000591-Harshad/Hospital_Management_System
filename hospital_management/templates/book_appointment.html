@@ -1,0 +1,97 @@
+{% extends 'base2.html' %}
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<div style="padding:36px; background:#f6f9fc; min-height:100vh;">
+    <div style="max-width:700px; margin:0 auto;">
+        
+        <h2 style="color:#0A4D68; margin-bottom:8px;">Book Appointment</h2>
+        <p style="color:#64757f; margin-bottom:24px;">Select a time slot to book your appointment</p>
+
+        <!-- Doctor Info -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:20px; margin-bottom:20px;">
+            <div style="display:flex; align-items:center;">
+                <div style="width:60px; height:60px; border-radius:50%; background:#0A4D68; 
+                            display:flex; align-items:center; justify-content:center; color:white; 
+                            font-size:24px; font-weight:bold; margin-right:16px;">
+                    {{ doctor.user.name[0].upper() if doctor.user else 'D' }}
+                </div>
+                <div>
+                    <h3 style="margin:0 0 4px 0; color:#0A4D68;">
+                        {{ doctor.user.name if doctor.user else 'Unknown Doctor' }}
+                    </h3>
+                    <p style="margin:0; color:#64757f;">{{ doctor.specialization }}</p>
+                    {% if doctor.department %}
+                    <p style="margin:2px 0 0 0; color:#64757f; font-size:14px;">
+                        {{ doctor.department.name }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointment Date -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:20px; margin-bottom:20px;">
+            <strong style="color:#233a45;">Appointment Date:</strong>
+            <p style="margin:8px 0 0 0; color:#0A4D68; font-size:18px; font-weight:600;">
+                {{ availability.date.strftime('%A, %d %B %Y') }}
+            </p>
+        </div>
+
+        <!-- Time Slots -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:20px; margin-bottom:20px;">
+            <h3 style="margin:0 0 16px 0; color:#233a45;">Select Time Slot</h3>
+            
+            <form method="POST">
+                <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:12px;">
+                    {% for slot in available_slots %}
+                    <label style="cursor:{{ 'not-allowed' if slot.is_booked else 'pointer' }};">
+                        <input type="radio" name="selected_time" value="{{ slot.time.strftime('%H:%M') }}" 
+                               required {{ 'disabled' if slot.is_booked else '' }}
+                               style="display:none;">
+                        <div style="padding:12px; border:2px solid {{ '#e3e9ee' if slot.is_booked else '#0A4D68' }}; 
+                                    border-radius:6px; text-align:center; 
+                                    background:{{ '#f8f9fa' if slot.is_booked else '#ffffff' }};
+                                    color:{{ '#adb5bd' if slot.is_booked else '#0A4D68' }};
+                                    transition:all 0.2s;"
+                             class="time-slot">
+                            <strong>{{ slot.time_str }}</strong>
+                            {% if slot.is_booked %}
+                            <div style="font-size:11px; color:#dc3545; margin-top:4px;">Booked</div>
+                            {% endif %}
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div style="margin-top:24px; display:flex; gap:12px;">
+                    <button type="submit" 
+                            style="padding:12px 24px; background:#2ecc71; color:white; border:none; 
+                                   border-radius:6px; font-size:16px; cursor:pointer; font-weight:600;">
+                        Confirm Booking
+                    </button>
+                    
+                    <a href="{{ url_for('views.view_doctor_profile', doctor_id=doctor.id) }}" 
+                       style="padding:12px 24px; background:#ffffff; border:1px solid #0A4D68; color:#0A4D68; 
+                              border-radius:6px; text-decoration:none; font-size:16px; display:inline-block;">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+input[type="radio"]:checked + .time-slot {
+    background: #0A4D68 !important;
+    color: white !important;
+    border-color: #0A4D68 !important;
+}
+
+.time-slot:hover:not([style*="not-allowed"]) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}

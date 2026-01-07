@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Aarogyika{% endblock  %}
+
+{%block content%}
+    <!-- HERO SECTION -->
+    <div style="display:flex; padding:80px 80px; align-items:center; justify-content:space-between; background:white;">
+
+        <!-- Text -->
+        <div style="flex:1; padding-right:40px; animation: fade 2.5s;">
+            <h3 style = "font-size:50px; color:#1A8F97;"> Aarogyika </h3>
+            <h1 style="font-size:38px; color:#2c3e50; margin:0 0 15px 0;">
+                Where Care Meets<br>Technology.
+            </h1>
+
+            <p style="font-size:20px; color:#555; line-height:1.5; margin-bottom:25px;">
+                A powerful, secure and easy-to-use hospital management system designed 
+                to simplify operations — from patient records to doctor scheduling.
+            </p>
+
+            <a href="/register" style="padding:14px 28px; background:#29ae60;
+            color:white; text-decoration:none; border-radius:6px; font-size:18px;">
+                Get Started
+            </a>
+        </div>
+
+        <!-- Doctor Image -->
+        <div style="flex:1; display:flex; justify-content:center;">
+            <img src="{{ url_for('static', filename='images/doctor.png') }}"
+            style="max-height:500px; border-radius:0; box-shadow:none; animation: slide 2.5s;">       
+        </div>
+
+    </div>
+
+
+
+    <!-- FEATURES SECTION -->
+    <div id="features" style="padding:60px 40px;">
+        <h2 style="text-align:center; font-size:32px; color:#2c3e50; margin-bottom:30px;">
+            Key Features
+        </h2>
+
+        <div style="display:flex; justify-content:space-around; flex-wrap:wrap;">
+            
+            <div style="background:white; width:260px; padding:20px; border-radius:50px; margin:15px; 
+            box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; animation: fade 2s;">
+                <img src="https://cdn-icons-png.flaticon.com/512/2966/2966486.png" 
+                style="width:60px; margin-bottom:10px;">
+                <h3 style="color:#3498db;">Patient Records</h3>
+                <p style="color:#555;">Access complete medical history in one secure space.</p>
+            </div>
+
+            <div style="background:white; width:260px; padding:20px; border-radius:50px; margin:15px; 
+            box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; animation: fade 2.2s;">
+                <img src="https://cdn-icons-png.flaticon.com/512/3037/3037605.png" 
+                style="width:60px; margin-bottom:10px;">
+                <h3 style="color:#e67e22;">Doctor Scheduling</h3>
+                <p style="color:#555;">Plan shifts and appointments with zero conflicts.</p>
+            </div>
+
+            <div style="background:white; width:260px; padding:20px; border-radius:50px; margin:15px; 
+            box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; animation: fade 2.4s;">
+                <img src="https://cdn-icons-png.flaticon.com/512/2921/2921826.png" 
+                style="width:60px; margin-bottom:10px;">
+                <h3 style="color:#27ae60;">Appointments</h3>
+                <p style="color:#555;">Book and manage appointments effortlessly.</p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- WHO CAN USE -->
+    <div style="padding:50px 40px; background:white;">
+        <h2 style="text-align:center; font-size:30px; color:#2c3e50;">Who Can Use This?</h2>
+
+        <div style="display:flex; justify-content:space-around; flex-wrap:wrap; margin-top:35px;">
+
+            <div style="width:200px; text-align:center;">
+                <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" style="width:55px;">
+                <h3>Doctors</h3>
+                <p style="color:#555;">Manage cases & schedules.</p>
+            </div>
+
+            <div style="width:200px; text-align:center;">
+                <img src="https://cdn-icons-png.flaticon.com/512/883/883407.png" style="width:55px;">
+                <h3>Admins</h3>
+                <p style="color:#555;">Control hospital-wide data.</p>
+            </div>
+
+            <div style="width:200px; text-align:center;">
+                <img src="https://cdn-icons-png.flaticon.com/512/4825/4825044.png" style="width:55px;">
+                <h3>Patients</h3>
+                <p style="color:#555;">Access appointments & reports.</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

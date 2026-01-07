@@ -1,0 +1,38 @@
+{% extends 'base2.html' %}
+{% block title %}Your History{% endblock %}
+{% block content %}
+<div style="padding:36px;">
+    <h2>Appointments & History</h2>
+
+    {% if appointments %}
+        <table style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr>
+            <th>#</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Treatment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in appointments %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ a.doctor.user.name if a.doctor and a.doctor.user else '—' }}</td>
+                <td>{{ a.date.strftime('%d/%m/%Y') }}</td>
+                <td>{{ a.time.strftime('%I:%M %p') }}</td>
+                <td>{{ a.status }}</td>
+                <td>
+                {% if a.treatment %}
+                    <strong>Diagnosis</strong><br>{{ a.treatment.diagnosis|nl2br }}<br>
+                    <strong>Prescription</strong><br>{{ a.treatment.prescription|nl2br }}
+                {% else %}
+                    -
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    {% else %}
+        <p>You have no appointments/history yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

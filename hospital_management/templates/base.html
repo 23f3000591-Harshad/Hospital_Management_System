@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{% block meta_description %}Default description{% endblock %}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<script>
+    setTimeout(() => {
+        document.querySelectorAll(".flash-msg").forEach(msg => {
+        msg.style.opacity = "0";
+        setTimeout(() => msg.remove(), 800); // remove after fade-out
+        });
+    }, 3000);
+</script>
+
+
+<body style="margin:0; font-family:Arial, sans-serif; background:#f4f6f9;">
+        <!-- NAVBAR -->
+        <div style="background:#ffffff; padding:15px 40px; display:flex; justify-content:space-between; align-items:center; 
+        box-shadow:0 2px 5px rgba(0,0,0,0.1); position:sticky; top:0; z-index:10;">
+    
+            <div>
+                <a href="/">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" style="width:180px; margin-bottom:center;"> 
+                </a>
+            </div>
+    
+            <div>
+                <a href="/" style="margin:0 15px; text-decoration:none; color:#34495e; font-weight:500;">Home</a>
+                <a href="/#features" style="margin:0 15px; text-decoration:none; color:#34495e; font-weight:500;">Features</a>
+                <a href="#contact" style="margin:0 15px; text-decoration:none; color:#34495e; font-weight:500;">Contact</a>
+                <a href="/register" style="margin-left:20px; padding:9px 20px; background:#2980b9;
+                color:white; border-radius:5px; text-decoration:none; border-radius:10px;">SignUp</a>
+                <a href="/login" style="margin-left:20px; padding:9px 20px; background:#2980b9; 
+                color:white; border-radius:5px; text-decoration:none; border-radius:10px">Login</a>
+            </div>
+        </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-box" style="
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        animation: fadeIn 0.3s;
+        ">
+        {% for category, message in messages %}
+            <div class="flash-msg" style="
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            min-width: 250px;
+            background: 
+                {% if category == 'error' %}
+                #ff4d4d;
+                {% else %}
+                #28a745;
+                {% endif %};
+            opacity: 0.9;
+            transition: opacity 0.8s ease;
+            ">
+            {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+
+    {% block content %}{% endblock %}
+    <!-- FOOTER -->
+    <div id = "contact" style="background:#ffffff; padding:60px 40px; border-top:1px solid #ddd;">
+
+        <!-- TOP AREA WITH LOGO + CONTACT + COLUMNS -->
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start;">
+
+            <!-- LOGO + CONTACT -->
+            <div style="width:250px; margin-bottom:30px;">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" style="width:180px; margin-bottom:15px;">
+
+                <h3 style="color:#2c3e50; margin:0;">CONNECT WITH US</h3>
+                <p style="color:#555; font-size:14px; margin-top:10px; line-height:1.4;">
+                    Sector-12, Madhya Marg,<br>
+                    Chandigarh, India - 160012
+                </p>
+
+                <!-- Social Icons -->
+                <div style="margin-top:10px;">
+                    <a href="#" style="margin-right:10px;"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="22"></a>
+                    <a href="#" style="margin-right:10px;"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" width="22"></a>
+                    <a href="#" style="margin-right:10px;"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" width="22"></a>    
+                </div>
+
+                <!-- App Store and Google Play -->
+                <div style="margin-top:15px;">
+                    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" style="width:130px; display:block; margin-bottom:10px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" style="width:130px;">
+                </div>
+            </div>
+
+            <!-- COMPANY COLUMN -->
+            <div style="min-width:180px; margin-bottom:30px;">
+                <h3 style="color:#3498db;">Company</h3>
+                <p style="margin:6px 0; color:#555;">About Us</p>
+                <p style="margin:6px 0; color:#555;">Careers</p>
+                <p style="margin:6px 0; color:#555;">Contact Us</p>
+                <p style="margin:6px 0; color:#555;">Partner with Us</p>
+            </div>
+
+            <!-- RESOURCES COLUMN -->
+            <div style="min-width:180px; margin-bottom:30px;">
+                <h3 style="color:#27ae60;">Resources</h3>
+                <p style="margin:6px 0; color:#555;">Blogs</p>
+                <p style="margin:6px 0; color:#555;">Brochures</p>
+                <p style="margin:6px 0; color:#555;">Media</p>
+            </div>
+        
+            <!-- CONTACT US COLUMN -->
+            <div style="min-width:180px; margin-bottom:30px;">
+                <h3 style="color:#9b59b6;">Contact Us</h3>
+                <p style="margin:6px 0; color:#555;">📞 +91 9876543210</p>
+                <p style="margin:6px 0; color:#555;">📧 support@aarogyika.com</p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div style="background:#263238; padding:60px 40px; border-top:1px solid #ddd;">
+        <div style="text-align:center;">
+            <span style="margin:0 12px; color:#ffffff;">India</span> |
+            <span style="margin:0 12px; color:#ffffff;">Malaysia</span> |
+            <span style="margin:0 12px; color:#ffffff;">Oman</span> |
+            <span style="margin:0 12px; color:#ffffff;">Fiji</span> |
+            <span style="margin:0 12px; color:#ffffff;">US</span> |
+            <span style="margin:0 12px; color:#ffffff;">Russia</span> |
+            <span style="margin:0 12px; color:#ffffff;">UK</span> 
+        </div>
+    
+    
+        <div style= "margin-top:20px; text-align:center; padding:10px 0; color:#555; font-size:14px;">
+
+            <a href="#" style="margin:0 10px; color:#3498db; text-decoration:none;">Privacy Policy</a>
+            <a href="#" style="margin:0 10px; color:#3498db; text-decoration:none;">Terms of Use</a>
+            <br><br>
+            <p style="margin-top:10px; color:#ffffff;">© 2025 Aarogyika. All Rights Reserved.</p>   
+        </div>
+    </div>
+
+    <!-- ANIMATIONS -->
+    <style>
+        @keyframes fade {
+            from {opacity:0;}
+            to {opacity:1;}
+        }
+
+        @keyframes slide {
+            from {transform:translateY(40px); opacity:0;}
+            to {transform:translateY(0); opacity:1;}
+        }
+    </style>
+</body>
+</html>

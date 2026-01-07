@@ -1,0 +1,99 @@
+{% extends 'base2.html' %}
+{% block title %}Availability{% endblock %}
+
+{% block content %}
+<div style="max-width:820px; margin:20px auto; padding:16px;">
+    <h2>Give Availability (next 7 days)</h2>
+    <p style="color:#666; margin-bottom:12px;"></p>
+
+    <form method="POST" id="simple-form">
+        <div style="display:grid; gap:10px;">
+        {% for d in days %}
+        {% set iso = d.isoformat() %}
+        <div style="display:flex; align-items:center; justify-content:space-between; border:1px solid #e6edf2; padding:10px; border-radius:8px; background:#fff;">
+            <div>
+            <strong>{{ d.strftime('%a, %d %b %Y') }}</strong>
+            <div style="font-size:13px; color:#666;">{{ iso }}</div>
+            </div>
+
+            <div style="display:flex; gap:8px; align-items:center;">
+            {# morning button #}
+            {% set key_m = iso + '|morning' %}
+            <button type="button"
+                    class="slot-btn {{ 'active' if key_m in existing_set else '' }}"
+                    data-value="{{ key_m }}"
+                    style="padding:8px 12px; border-radius:6px; border:2px solid #84cc16; background:{{ 'lightgreen' if key_m in existing_set else 'white' }};">
+                Morning<br><small style="font-size:11px;">08:00–12:00</small>
+            </button>
+
+            {# evening button #}
+            {% set key_e = iso + '|evening' %}
+            <button type="button"
+                    class="slot-btn {{ 'active' if key_e in existing_set else '' }}"
+                    data-value="{{ key_e }}"
+                    style="padding:8px 12px; border-radius:6px; border:2px solid #0ea5e9; background:{{ 'lightcyan' if key_e in existing_set else 'white' }};">
+                Evening<br><small style="font-size:11px;">16:00–21:00</small>
+            </button>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+
+        {# container for hidden inputs (populated by JS) #}
+        <div id="selected-container"></div>
+
+        <div style="margin-top:14px; text-align:right;">
+        <a href="{{ url_for('views.doctor_dashboard') }}" style="margin-right:8px;">Cancel</a>
+        <button type="submit" style="padding:8px 14px; background:#10b981; color:white; border-radius:6px; border:none;">Save</button>
+        </div>
+    </form>
+</div>
+
+<script>
+(function(){
+  // On load, mark buttons that have class "active" and build hidden inputs
+    const form = document.getElementById('simple-form');
+    const selectedContainer = document.getElementById('selected-container');
+
+    function buildHiddenInputs(){
+        selectedContainer.innerHTML = '';
+        document.querySelectorAll('.slot-btn.active').forEach(btn=>{
+        const val = btn.dataset.value;
+        // create an input name selected[] with that value
+        const inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'selected[]';
+        inp.value = val;
+        selectedContainer.appendChild(inp);
+        });
+    }
+
+    // toggle behavior
+    document.querySelectorAll('.slot-btn').forEach(btn=>{
+        btn.addEventListener('click', function(){
+        btn.classList.toggle('active');
+        // visual toggle
+        if (btn.classList.contains('active')){
+            btn.style.opacity = '1.0';
+        } else {
+            btn.style.opacity = '0.5';
+        }
+        buildHiddenInputs();
+        });
+    });
+
+  // initialize hidden inputs from any pre-active buttons
+    buildHiddenInputs();
+
+  // optional: ensure at least one slot selected before submit
+    form.addEventListener('submit', function(e){
+
+});
+})();
+</script>
+
+<style>
+.slot-btn { cursor:pointer; min-width:110px; text-align:center; }
+.slot-btn.active { box-shadow:0 0 0 3px rgba(16,185,129,0.12); }
+</style>
+{% endblock %}

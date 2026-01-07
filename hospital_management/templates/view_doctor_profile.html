@@ -1,0 +1,130 @@
+{% extends 'base2.html' %}
+{% block title %}{{ doctor.user.name if doctor.user else 'Doctor Profile' }}{% endblock %}
+
+{% block content %}
+<div style="padding:36px; background:#f6f9fc; min-height:100vh;">
+    <div style="max-width:900px; margin:0 auto;">
+        
+        <!-- Doctor Profile Card -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:24px; margin-bottom:20px;">
+            <div style="display:flex; align-items:center; margin-bottom:20px;">
+                <!-- Doctor Avatar -->
+                <div style="width:80px; height:80px; border-radius:50%; background:#0A4D68; 
+                            display:flex; align-items:center; justify-content:center; color:white; 
+                            font-size:32px; font-weight:bold; margin-right:20px;">
+                    {{ doctor.user.name[0].upper() if doctor.user else 'D' }}
+                </div>
+                
+                <!-- Doctor Info -->
+                <div>
+                    <h2 style="margin:0 0 6px 0; color:#0A4D68;">
+                        {{ doctor.user.name if doctor.user else 'Unknown Doctor' }}
+                    </h2>
+                    <p style="margin:0; color:#64757f; font-size:16px;">
+                        {{ doctor.specialization or 'General Physician' }}
+                    </p>
+                    {% if doctor.department %}
+                    <p style="margin:4px 0 0 0; color:#64757f; font-size:14px;">
+                        Department: <strong>{{ doctor.department.name }}</strong>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Doctor Details Grid -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px; margin-top:20px;">
+                
+                {% if doctor.qualifications %}
+                <div style="padding:12px; background:#f8f9fa; border-radius:6px;">
+                    <strong style="color:#64757f; font-size:13px; display:block; margin-bottom:4px;">
+                        Qualifications
+                    </strong>
+                    <span style="color:#2c3e50;">{{ doctor.qualifications }}</span>
+                </div>
+                {% endif %}
+                
+                {% if doctor.experience_years %}
+                <div style="padding:12px; background:#f8f9fa; border-radius:6px;">
+                    <strong style="color:#64757f; font-size:13px; display:block; margin-bottom:4px;">
+                        Experience
+                    </strong>
+                    <span style="color:#2c3e50;">{{ doctor.experience_years }} years</span>
+                </div>
+                {% endif %}
+                
+                {% if doctor.contact_number %}
+                <div style="padding:12px; background:#f8f9fa; border-radius:6px;">
+                    <strong style="color:#64757f; font-size:13px; display:block; margin-bottom:4px;">
+                        Contact Number
+                    </strong>
+                    <span style="color:#2c3e50;">{{ doctor.contact_number }}</span>
+                </div>
+                {% endif %}
+                
+                {% if doctor.user and doctor.user.email %}
+                <div style="padding:12px; background:#f8f9fa; border-radius:6px;">
+                    <strong style="color:#64757f; font-size:13px; display:block; margin-bottom:4px;">
+                        Email
+                    </strong>
+                    <span style="color:#2c3e50;">{{ doctor.user.email }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Available Time Slots Section -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:24px; margin-bottom:20px;">
+            <h3 style="margin:0 0 16px 0; color:#233a45;">Book an Appointment</h3>
+            
+            {% if doctor.availabilities %}
+                <div style="margin-bottom:16px;">
+                    <p style="color:#64757f; margin-bottom:12px;">Select a date and time slot:</p>
+                    
+                    <div style="display:grid; gap:12px;">
+                        {% for availability in doctor.availabilities %}
+                        <div style="padding:12px; border:1px solid #e6e9ee; border-radius:6px; background:#fafbfc;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <strong style="color:#0A4D68;">{{ availability.date.strftime('%A, %d %B %Y') }}</strong>
+                                    <p style="margin:4px 0 0 0; color:#64757f; font-size:14px;">
+                                        {{ availability.start_time.strftime('%I:%M %p') }} - 
+                                        {{ availability.end_time.strftime('%I:%M %p') }}
+                                        ({{ availability.slot_minutes }} min slots)
+                                    </p>
+                                </div>
+                                <a href="{{ url_for('views.book_appointment', doctor_id=doctor.id, availability_id=availability.id) }}" 
+                                    style="padding:8px 16px; background:#2ecc71; color:white; 
+                                        border-radius:6px; text-decoration:none; font-size:14px;">
+                                    Book Now
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div style="padding:20px; text-align:center; background:#fff3cd; border:1px solid #ffe7a1; 
+                            border-radius:6px; color:#856404;">
+                    <strong>No available time slots at the moment.</strong>
+                    <p style="margin:8px 0 0 0; font-size:14px;">Please check back later or contact the doctor directly.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex; gap:12px;">
+            <a href="{{ url_for('views.patient_view_department', department_id=doctor.department_id) }}" 
+                style="padding:10px 16px; background:#ffffff; border:1px solid #0A4D68; color:#0A4D68; 
+                    border-radius:6px; text-decoration:none; font-size:14px;">
+                ← Back to Department
+            </a>
+            
+            <a href="{{ url_for('views.patient_dashboard') }}" 
+                style="padding:10px 16px; background:#ffffff; border:1px solid #64757f; color:#64757f; 
+                    border-radius:6px; text-decoration:none; font-size:14px;">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

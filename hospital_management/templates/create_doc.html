@@ -1,0 +1,82 @@
+{% extends 'base2.html' %}
+{% block title %}Add Doctor{% endblock %}
+
+{% block content %}
+
+<div style="width:100%; min-height:100vh; display:flex; justify-content:center; align-items:center; background:#e9f4ff;">
+
+    <div style="width:320px; padding:20px; background:white; border:1px solid #ccc; border-radius:10px; text-align:center;">
+
+        <h2 style="margin-bottom:20px; font-family:Arial; color:#0A4D68;">
+            Add Doctor
+        </h2>
+
+        <form action="/admin/create_doctor" method="POST">
+
+            <input type="text" name="name" placeholder="Name" required style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <input type="email" name="email" placeholder="Email" required style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+        
+            <input type="password" name="password" placeholder="Password" required style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <!-- DEPARTMENT DROPDOWN (FIXED) -->
+            <select name="department_id" required style="
+                width:98%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+                <option value="">Select Department</option>
+                {% for dept in departments %}
+                    <option value="{{dept.id}}">{{dept.name}}</option>
+                {% endfor %}
+            </select>
+
+            <!-- SPECIALIZATION INPUT (NEW) -->
+            <input type="text" name="specialization" placeholder="Specialization (e.g., Oncologist)" required style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <input type="text" name="qualifications" placeholder="Qualifications" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <input type="number" name="experience_years" placeholder="Experience Years" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <input type="tel" name="contact_number" placeholder="Contact Number" style="
+                width:90%; padding:10px; margin-bottom:10px;
+                border:1px solid #aaa; border-radius:5px;
+            ">
+
+            <button style="
+                width:70%; padding:10px; margin-top:10px;
+                background:#0A4D68; color:white;
+                border:none; border-radius:5px; cursor:pointer;
+            ">
+                Create
+            </button>
+
+        </form>
+
+        <div style="margin-top:15px;">
+            <a href="{{ url_for('views.admin_dashboard') }}" style="color:#0A4D68; text-decoration:none;">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

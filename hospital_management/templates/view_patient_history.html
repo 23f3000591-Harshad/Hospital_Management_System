@@ -1,0 +1,119 @@
+{% extends 'base2.html' %}
+{% block title %}Patient History{% endblock %}
+
+{% block content %}
+<style>
+.history-container {
+    padding: 36px;
+    color: #2c3e50;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.section-card {
+    background: #fff;
+    padding: 18px;
+    border: 1px solid #d7dde3;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eef2f5;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.badge-booked { background: #fff3cd; color: #856404; }
+.badge-completed { background: #d4edda; color: #155724; }
+.badge-cancelled { background: #f8d7da; color: #721c24; }
+
+.empty-note {
+    color: #6b7280;
+    font-style: italic;
+}
+</style>
+
+<div class="history-container">
+
+    <h2>Patient History</h2>
+    <small style="color:#6b7280">Viewing records for {{ patient.user.name }}</small>
+
+    <div class="section-card">
+        <h3 style="margin-top:0">All Appointments</h3>
+
+        {% if appointments %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Sr No.</th>
+                <th>Doctor</th>
+                <th>Dept</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Diagnosis</th>
+                <th>Prescription</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for a in appointments %}
+                <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ a.doctor.user.name }}</td>
+                <td>{{ a.doctor.department.name }}</td>
+                <td>{{ a.date.strftime('%d/%m/%Y') }}</td>
+                <td>{{ a.time.strftime('%I:%M %p') }}</td>
+
+                <td>
+                    {% if a.status == 'Booked' %}
+                    <span class="badge badge-booked">{{ a.status }}</span>
+                    {% elif a.status == 'Completed' %}
+                    <span class="badge badge-completed">{{ a.status }}</span>
+                    {% else %}
+                    <span class="badge badge-cancelled">{{ a.status }}</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if a.treatment and a.treatment.diagnosis %}
+                    {{ a.treatment.diagnosis }}
+                    {% else %}
+                    <span class="empty-note">--</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if a.treatment and a.treatment.prescription %}
+                    {{ a.treatment.prescription }}
+                    {% else %}
+                    <span class="empty-note">--</span>
+                    {% endif %}
+                </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <p class="empty-note">No appointment history available.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base2.html' %}
+{% block title %}{{ department.name }} - Department{% endblock %}
+
+{% block content %}
+<div style="padding:36px; background:#f6f9fc; min-height:100vh;">
+    <div style="max-width:1100px; margin:0 auto;">
+        <h2 style="color:#0A4D68;">{{ department.name }}</h2>
+        <p style="color:#6b7280; margin-bottom:20px;">{{ department.description or "No description available." }}</p>
+
+        <!-- Doctors in Department -->
+        <div style="background:#fff; border:1px solid #e3e9ee; border-radius:8px; padding:14px; margin-top:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="color:#233a45;">Available Doctors</strong>
+            </div>
+
+            {% if department.doctors %}
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;">
+                {% for doc in department.doctors %}
+                <div style="background:#fafbfc; border:1px solid #e6e9ee; border-radius:8px; padding:16px;">
+                    <h3 style="margin:0 0 8px 0; color:#0A4D68; font-size:18px;">
+                        {{ doc.user.name if doc.user else 'Unknown Doctor' }}
+                    </h3>
+                    
+                    <div style="margin-bottom:6px;">
+                        <strong style="color:#64757f; font-size:13px;">Specialization:</strong>
+                        <span style="color:#2c3e50;">{{ doc.specialization or '—' }}</span>
+                    </div>
+                    
+                    {% if doc.qualifications %}
+                    <div style="margin-bottom:6px;">
+                        <strong style="color:#64757f; font-size:13px;">Qualifications:</strong>
+                        <span style="color:#2c3e50;">{{ doc.qualifications }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if doc.experience_years %}
+                    <div style="margin-bottom:6px;">
+                        <strong style="color:#64757f; font-size:13px;">Experience:</strong>
+                        <span style="color:#2c3e50;">{{ doc.experience_years }} years</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if doc.contact_number %}
+                    <div style="margin-bottom:12px;">
+                        <strong style="color:#64757f; font-size:13px;">Contact:</strong>
+                        <span style="color:#2c3e50;">{{ doc.contact_number }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div style="margin-top:12px;">
+                        <a href="{{ url_for('views.view_doctor_profile', doctor_id=doc.id) }}" 
+                            style="padding:8px 14px; background:#0A4D68; color:white; 
+                                border-radius:6px; text-decoration:none; font-size:13px; display:inline-block;">
+                            View Profile & Book Appointment
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="padding:20px; text-align:center; color:#64757f;">
+                No doctors are currently available in this department.
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Back Button -->
+        <div style="margin-top:20px;">
+            <a href="{{ url_for('views.patient_dashboard') }}" 
+                style="padding:8px 14px; background:#ffffff; border:1px solid #0A4D68; color:#0A4D68; 
+                    border-radius:6px; text-decoration:none; font-size:14px; display:inline-block;">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
