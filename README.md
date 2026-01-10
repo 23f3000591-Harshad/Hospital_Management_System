@@ -78,13 +78,17 @@ All workflows are enforced at the backend level to prevent unauthorized actions.
 
 ## Setup Instructions
 
+## Setup
+
 ```bash
-git clone <your-repo-link>
-cd hospital-management-system
+git clone https://github.com/23f3000591-Harshad/Hospital_Management_System.git
+cd Hospital_Management_System
 
 python -m venv venv
-source venv/bin/activate  # Linux / macOS
-venv\Scripts\activate     # Windows
+source venv/bin/activate    # Linux / macOS
+venv\Scripts\activate       # Windows
 
+pip install -r requirements.txt
+flask run
 pip install -r requirements.txt
 flask run
